@@ -706,7 +706,7 @@ static int internal_expunge(int sock)
     return(PS_SUCCESS);
 }
 
-static int imap_idle(int sock)
+static int imap_idle(int sock, int server_idle_timeout)
 /* start an RFC2177 IDLE, or fake one if unsupported */
 {
     int ok;
@@ -717,7 +717,7 @@ static int imap_idle(int sock)
 	/* special timeout to terminate the IDLE and re-issue it
 	 * at least every 28 minutes:
 	 * (the server may have an inactivity timeout) */
-	mytimeout = idle_timeout = 1680; /* 28 min */
+	mytimeout = idle_timeout = server_idle_timeout;
 	time(&idle_start_time);
 	stage = STAGE_IDLE;
 	/* enter IDLE mode */
@@ -899,7 +899,7 @@ static int imap_getrange(int sock,
 	 * mailbox changes also */
 	while (recentcount == 0 && do_idle) {
 	    smtp_close(ctl, 1);
-	    ok = imap_idle(sock);
+	    ok = imap_idle(sock, ctl->server.idle_timeout);
 	    if (ok)
 	    {
 		report(stderr, GT_("re-poll failed\n"));
@@ -958,7 +958,7 @@ static int imap_getrange(int sock,
 	{
 	    /* no messages?  then we may need to idle until we get some */
 	    while (count == 0) {
-		ok = imap_idle(sock);
+		ok = imap_idle(sock, ctl->server.idle_timeout);
 		if (ok)
 		{
 		    report(stderr, GT_("re-poll failed\n"));

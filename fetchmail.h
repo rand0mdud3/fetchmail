@@ -249,6 +249,7 @@ struct hostdata		/* shared among all user connections to given server */
     int interval;			/* # cycles to skip between polls */
     int authenticate;			/* authentication mode to try */
     int timeout;			/* inactivity timout in seconds */
+    int idle_timeout;			/* inactivity timout with IDLE'ing */
     char *envelope;			/* envelope address list header */
     int envskip;			/* skip to numbered envelope header */
     char *qvirtual;			/* prefix removed from local user id */

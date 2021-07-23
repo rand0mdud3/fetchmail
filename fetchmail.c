@@ -1070,6 +1070,7 @@ static int load_params(int argc, char **argv, int optind)
     def_opts.smtpname = (char *)0;
     def_opts.server.protocol = P_AUTO;
     def_opts.server.timeout = CLIENT_TIMEOUT;
+    def_opts.server.idle_timeout = CLIENT_IDLE_TIMEOUT;
     def_opts.server.esmtp_name = user;
     def_opts.server.badheader = BHREJECT;
     def_opts.warnings = WARNING_INTERVAL;
@@ -1773,6 +1774,13 @@ static void dump_params (struct runctl *runp,
 	if (ctl->server.timeout > 0)
 	    printf(GT_("  Server nonresponse timeout is %d seconds"), ctl->server.timeout);
 	if (ctl->server.timeout ==  CLIENT_TIMEOUT)
+	    printf(GT_(" (default).\n"));
+	else
+	    printf(".\n");
+
+	if (ctl->server.idle_timeout > 0)
+	    printf(GT_("  Server IDLE timeout is %d seconds"), ctl->server.idle_timeout);
+	if (ctl->server.idle_timeout ==  CLIENT_IDLE_TIMEOUT)
 	    printf(GT_(" (default).\n"));
 	else
 	    printf(".\n");
